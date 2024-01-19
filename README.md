@@ -1,14 +1,10 @@
-# ns8-kickstart
+# ns8-zitadel
+
+[Zitadel](https://zitadel.com/) is an opensource Identity Infrastructure for organizations, with Multi tenancy Support.
+
+[Docker Compose.](https://raw.githubusercontent.com/zitadel/zitadel/main/docs/docs/self-hosting/deploy/docker-compose.yaml)
 
 This is a template module for [NethServer 8](https://github.com/NethServer/ns8-core).
-To start a new module from it:
-
-1. Click on [Use this template](https://github.com/NethServer/ns8-kickstart/generate).
-   Name your repo with `ns8-` prefix (e.g. `ns8-mymodule`). 
-   Do not end your module name with a number, like ~~`ns8-baaad2`~~!
-
-1. Clone the repository, enter the cloned directory and
-   [configure your GIT identity](https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup#_your_identity)
 
 1. Rename some references inside the repo:
    ```
