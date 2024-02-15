@@ -10,8 +10,8 @@
 
 [Unit]
 Description=Podman zidatel.service
-Requires=mariadb-app.service zidatel-app.service
-Before=mariadb-app.service zidatel-app.service
+Requires=crdb-app.service zidatel-app.service
+Before=crdb-app.service zidatel-app.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
