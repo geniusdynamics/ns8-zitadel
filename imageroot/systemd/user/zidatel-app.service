@@ -1,0 +1,39 @@
+#
+# Copyright (C) 2022 Nethesis S.r.l.
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+
+[Unit]
+Description=Podman  zidatel-app.service
+BindsTo=zidatel.service
+After=zidatel.service crdb-app.service
+
+[Service]
+Environment=PODMAN_SYSTEMD_UNIT=%n
+EnvironmentFile=%S/state/environment
+EnvironmentFile=-%S/state/smarthost.env
+WorkingDirectory=%S/state
+Restart=always
+TimeoutStopSec=70
+ExecStartPre=/bin/mkdir -p config
+ExecStartPre=/bin/rm -f %t/zidatel-app.pid %t/zidatel-app.ctr-id
+ExecStartPre=-runagent discover-smarthost
+ExecStart=/usr/bin/podman run --conmon-pidfile %t/zidatel-app.pid \
+    --cidfile %t/zidatel-app.ctr-id --cgroups=no-conmon \
+    --pod-id-file %t/zidatel.pod-id --replace -d --name  zidatel-app \
+    --volume config:/config:Z \
+    start-from-init \
+    --env=ZITADEL_DATABASE_COCKROACH_HOST=crdb \
+    --env=ZITADEL_EXTERNALSECURE=false \
+    --masterKey "868A71B58D431EB189F55BD6DFB93930" \
+    --tlsMode disabled \
+    ${ZIDATEL_IMAGE}
+ExecStop=/usr/bin/podman stop --ignore --cidfile %t/zidatel-app.ctr-id -t 10
+ExecReload=/usr/bin/podman kill -s HUP zidatel-app
+SyslogIdentifier=%u
+ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/zidatel-app.ctr-id
+PIDFile=%t/zidatel-app.pid
+Type=forking
+
+[Install]
+WantedBy=default.target
