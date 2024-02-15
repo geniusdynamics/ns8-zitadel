@@ -25,7 +25,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/zidatel-app.pid \
     --env=ZITADEL_DATABASE_COCKROACH_HOST=crdb \
     --env=ZITADEL_EXTERNALSECURE=false \
     ${ZIDATEL_IMAGE}
-ExecStartPost=/usr/bin/podman exec start-from-init --masterKey "3AAAFE86B1CA7D860A95AAE91BEE5D48" --tlsMode disabled
+ExecStartPost=/usr/bin/podman exec zidatel-app start-from-init --masterKey "3AAAFE86B1CA7D860A95AAE91BEE5D48" --tlsMode disabled
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/zidatel-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP zidatel-app
 SyslogIdentifier=%u
