@@ -1,0 +1,32 @@
+#
+# Copyright (C) 2022 Nethesis S.r.l.
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+
+[Unit]
+Description=Podman crdb-app.service
+BindsTo=zidatel.service
+After=zidatel.service
+
+[Service]
+Environment=PODMAN_SYSTEMD_UNIT=%n
+EnvironmentFile=%S/state/environment
+# EnvironmentFile=%S/state/secrets/passwords.secret
+Restart=always
+TimeoutStopSec=70
+ExecStartPre=/bin/rm -f %t/crdb-app.pid %t/crdb-app.ctr-id
+ExecStart=/usr/bin/podman run --conmon-pidfile %t/crdb-app.pid \
+    --cidfile %t/crdb-app.ctr-id --cgroups=no-conmon \
+    --pod-id-file %t/zidatel.pod-id --replace -d --name crdb-app \
+    start-single-node \
+    --insecure \
+    ${COCKROACH_IMAGE}
+ExecStop=/usr/bin/podman stop --ignore --cidfile %t/crdb-app.ctr-id -t 10
+ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/crdb-app.ctr-id
+ExecReload=/usr/bin/podman kill -s HUP crdb-app
+SyslogIdentifier=%u
+PIDFile=%t/crdb-app.pid
+Type=forking
+
+[Install]
+WantedBy=default.target
