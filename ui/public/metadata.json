@@ -1,19 +1,19 @@
 {
-  "name": "kickstart",
+  "name": "zidatel",
   "description": {
-    "en": "My kickstart module"
+    "en": "My zidatel module"
   },
   "categories": [],
   "authors": [
     {
-      "name": "Name Surname",
-      "email": "author@yourmail.org"
+      "name": "Kemboi Elvis",
+      "email": "kemboielvis@genius.ke"
     }
   ],
   "docs": {
     "documentation_url": "https://docs.kickstart.com/",
-    "bug_url": "https://github.com/NethServer/dev",
-    "code_url": "https://github.com/author/ns8-kickstart"
+    "bug_url": "https://github.com/geniusdynamics/ns8-zitadel",
+    "code_url": "https://github.com/geniusdynamics/ns8-zitadel"
   },
-  "source": "ghcr.io/nethserver/kickstart"
+  "source": "ghcr.io/geniusdynamics/zidatel"
 }
