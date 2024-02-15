@@ -49,6 +49,13 @@ You can retrieve the configuration with
 api-cli run get-configuration --agent module/zidatel1
 ```
 
+## Update Module
+You can forcefully update the module
+
+```shell
+api-cli run update-module --data '{"module_url":"ghcr.io/geniusdynamics/zidatel:latest","instances":["zidatel1"],"force":true}'
+```
+
 ## Uninstall
 
 To uninstall the instance:
