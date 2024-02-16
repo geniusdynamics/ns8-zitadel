@@ -18,6 +18,7 @@ ExecStartPre=/bin/rm -f %t/crdb-app.pid %t/crdb-app.ctr-id
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/crdb-app.pid \
     --cidfile %t/crdb-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/zidatel.pod-id --replace -d --name crdb-app \
+    --env=COCKROACH_RAFT_CLOSEDTS_ASSERTIONS_ENABLED=false \
     ${COCKROACH_IMAGE}
 ExecStartPost=/usr/bin/podman exec crdb-app start --pid-file crdb.pid --insecure
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/crdb-app.ctr-id -t 10
