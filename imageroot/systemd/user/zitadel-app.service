@@ -19,7 +19,7 @@ ExecStartPre=/bin/mkdir -p config
 ExecStartPre=/bin/rm -f %t/zitadel-app.pid %t/zitadel-app.ctr-id
 ExecStartPre=-runagent discover-smarthost
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/zitadel-app.pid \
-    --cidfile %t/zitadel-app.ctr-id --cgroups=no-conmon --network=zitadel \
+    --cidfile %t/zitadel-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/zitadel.pod-id --replace -d --name  zitadel-app \
     --volume=config:/config:Z \
     --env=ZITADEL_DATABASE_COCKROACH_HOST=127.0.0.1 \
