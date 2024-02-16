@@ -4,9 +4,9 @@
 #
 
 [Unit]
-Description=Podman  zidatel-app.service
-BindsTo=zidatel.service
-After=zidatel.service crdb-app.service
+Description=Podman  zitadel-app.service
+BindsTo=zitadel.service
+After=zitadel.service crdb-app.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
@@ -16,21 +16,21 @@ WorkingDirectory=%S/state
 Restart=always
 TimeoutStopSec=70
 ExecStartPre=/bin/mkdir -p config
-ExecStartPre=/bin/rm -f %t/zidatel-app.pid %t/zidatel-app.ctr-id
+ExecStartPre=/bin/rm -f %t/zitadel-app.pid %t/zitadel-app.ctr-id
 ExecStartPre=-runagent discover-smarthost
-ExecStart=/usr/bin/podman run --conmon-pidfile %t/zidatel-app.pid \
-    --cidfile %t/zidatel-app.ctr-id --cgroups=no-conmon \
-    --pod-id-file %t/zidatel.pod-id --replace -d --name  zidatel-app start-from-init \
+ExecStart=/usr/bin/podman run --conmon-pidfile %t/zitadel-app.pid \
+    --cidfile %t/zitadel-app.ctr-id --cgroups=no-conmon \
+    --pod-id-file %t/zitadel.pod-id --replace -d --name  zitadel-app start-from-init \
     --volume config:/config:Z \
     --env=ZITADEL_DATABASE_COCKROACH_HOST=crdb \
     --env=ZITADEL_EXTERNALSECURE=false \
     ${ZITADEL_IMAGE} \
     start-from-init --masterKey "3AAAFE86B1CA7D860A95AAE91BEE5D48" --tlsMode disabled
-ExecStop=/usr/bin/podman stop --ignore --cidfile %t/zidatel-app.ctr-id -t 10
-ExecReload=/usr/bin/podman kill -s HUP zidatel-app
+ExecStop=/usr/bin/podman stop --ignore --cidfile %t/zitadel-app.ctr-id -t 10
+ExecReload=/usr/bin/podman kill -s HUP zitadel-app
 SyslogIdentifier=%u
-ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/zidatel-app.ctr-id
-PIDFile=%t/zidatel-app.pid
+ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/zitadel-app.ctr-id
+PIDFile=%t/zitadel-app.pid
 Type=forking
 
 [Install]
