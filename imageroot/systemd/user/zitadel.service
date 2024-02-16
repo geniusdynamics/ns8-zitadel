@@ -24,6 +24,7 @@ ExecStartPre=/usr/bin/podman pod create --infra-conmon-pidfile %t/zitadel.pid \
     --name zitadel \
     --publish 127.0.0.1:${TCP_PORT}:80 \
     --replace
+ExecStartPre=/usr/bin/podman network create zitadel
 ExecStart=/usr/bin/podman pod start --pod-id-file %t/zitadel.pod-id
 ExecStop=/usr/bin/podman pod stop --ignore --pod-id-file %t/zitadel.pod-id -t 10
 ExecStopPost=/usr/bin/podman pod rm --ignore -f --pod-id-file %t/zitadel.pod-id
