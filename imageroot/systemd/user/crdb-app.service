@@ -15,6 +15,7 @@ EnvironmentFile=%S/state/environment
 Restart=always
 TimeoutStopSec=70
 ExecStartPre=/bin/rm -f %t/crdb-app.pid %t/crdb-app.ctr-id
+ExecStartPre=/bin/rm -r cockroach-data
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/crdb-app.pid \
     --cidfile %t/crdb-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/zidatel.pod-id --replace -d --name crdb-app \
