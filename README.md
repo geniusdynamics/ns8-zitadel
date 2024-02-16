@@ -9,16 +9,16 @@ This is a template module for [NethServer 8](https://github.com/NethServer/ns8-c
 
 Instantiate the module with:
 
-    add-module ghcr.io/geniusdynamics/zidatel:latest 1
+    add-module ghcr.io/geniusdynamics/zitadel:latest 1
 
 The output of the command will return the instance name.
 Output example:
 
-    {"module_id": "zidatel1", "image_name": "zidatel", "image_url": "ghcr.io/geniusdynamics/zidatel:latest"}
+    {"module_id": "zitadel1", "image_name": "zitadel", "image_url": "ghcr.io/geniusdynamics/zitadel:latest"}
 
 ## Configure
 
-Let's assume that the mattermost instance is named `zidatel1`.
+Let's assume that the mattermost instance is named `zitadel1`.
 
 Launch `configure-module`, by setting the following parameters:
 - `host`: a fully qualified domain name for the application
@@ -29,9 +29,9 @@ Launch `configure-module`, by setting the following parameters:
 Example:
 
 ```
-api-cli run configure-module --agent module/zidatel1 --data - <<EOF
+api-cli run configure-module --agent module/zitadel1 --data - <<EOF
 {
-  "host": "zidatel.domain.com",
+  "host": "zitadel.domain.com",
   "http2https": true,
   "lets_encrypt": false
 }
@@ -39,28 +39,28 @@ EOF
 ```
 
 The above command will:
-- start and configure the zidatel instance
+- start and configure the zitadel instance
 - configure a virtual host for trafik to access the instance
 
 ## Get the configuration
 You can retrieve the configuration with
 
 ```
-api-cli run get-configuration --agent module/zidatel1
+api-cli run get-configuration --agent module/zitadel1
 ```
 
 ## Update Module
 You can forcefully update the module
 
 ```shell
-api-cli run update-module --data '{"module_url":"ghcr.io/geniusdynamics/zidatel:latest","instances":["zidatel1"],"force":true}'
+api-cli run update-module --data '{"module_url":"ghcr.io/geniusdynamics/zitadel:latest","instances":["glpi1"],"force":true}'
 ```
 
 ## Uninstall
 
 To uninstall the instance:
 
-    remove-module --no-preserve zidatel1
+    remove-module --no-preserve zitadel1
 
 ## Smarthost setting discovery
 
@@ -69,14 +69,14 @@ Some configuration settings, like the smarthost setup, are not part of the
 Redis keys.  To ensure the module is always up-to-date with the
 centralized [smarthost
 setup](https://geniusdynamics.github.io/ns8-core/core/smarthost/) every time
-zidatel starts, the command `bin/discover-smarthost` runs and refreshes
+zitadel starts, the command `bin/discover-smarthost` runs and refreshes
 the `state/smarthost.env` file with fresh values from Redis.
 
-Furthermore if smarthost setup is changed when zidatel is already
+Furthermore if smarthost setup is changed when zitadel is already
 running, the event handler `events/smarthost-changed/10reload_services`
 restarts the main module service.
 
-See also the `systemd/user/zidatel.service` file.
+See also the `systemd/user/zitadel.service` file.
 
 This setting discovery is just an example to understand how the module is
 expected to work: it can be rewritten or discarded completely.
@@ -85,19 +85,19 @@ expected to work: it can be rewritten or discarded completely.
 
 some CLI are needed to debug
 
-- The module runs under an agent that initiate a lot of environment variables (in /home/zidatel1/.config/state), it could be nice to verify them
+- The module runs under an agent that initiate a lot of environment variables (in /home/zitadel1/.config/state), it could be nice to verify them
 on the root terminal
 
-    `runagent -m zidatel1 env`
+    `runagent -m zitadel1 env`
 
 - you can become runagent for testing scripts and initiate all environment variables
   
-    `runagent -m zidatel1`
+    `runagent -m zitadel1`
 
  the path become : 
 ```
     echo $PATH
-    /home/zidatel1/.config/bin:/usr/local/agent/pyenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/
+    /home/zitadel1/.config/bin:/usr/local/agent/pyenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/
 ```
 
 ## Testing
@@ -105,7 +105,7 @@ on the root terminal
 Test the module using the `test-module.sh` script:
 
 
-    ./test-module.sh <NODE_ADDR> ghcr.io/geniusdynamics/zidatel:latest
+    ./test-module.sh <NODE_ADDR> ghcr.io/geniusdynamics/zitadel:latest
 
 The tests are made using [Robot Framework](https://robotframework.org/)
 

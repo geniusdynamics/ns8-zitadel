@@ -1,7 +1,7 @@
 {
-  "name": "zidatel",
+  "name": "zitadel",
   "description": {
-    "en": "My zidatel module"
+    "en": "My zitadel module"
   },
   "categories": [],
   "authors": [
@@ -15,5 +15,5 @@
     "bug_url": "https://github.com/geniusdynamics/ns8-zitadel",
     "code_url": "https://github.com/geniusdynamics/ns8-zitadel"
   },
-  "source": "ghcr.io/geniusdynamics/zidatel"
+  "source": "ghcr.io/geniusdynamics/zitadel"
 }

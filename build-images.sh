@@ -13,22 +13,22 @@ images=()
 # The image will be pushed to GitHub container registry
 repobase="${REPOBASE:-ghcr.io/geniusdynamics}"
 # Configure the image name
-reponame="zidatel"
+reponame="zitadel"
 
 # Create a new empty container image
 container=$(buildah from scratch)
 
-# Reuse existing nodebuilder-zidatel container, to speed up builds
-if ! buildah containers --format "{{.ContainerName}}" | grep -q nodebuilder-zidatel; then
+# Reuse existing nodebuilder-zitadel container, to speed up builds
+if ! buildah containers --format "{{.ContainerName}}" | grep -q nodebuilder-zitadel; then
     echo "Pulling NodeJS runtime..."
-    buildah from --name nodebuilder-zidatel -v "${PWD}:/usr/src:Z" docker.io/library/node:lts
+    buildah from --name nodebuilder-zitadel -v "${PWD}:/usr/src:Z" docker.io/library/node:lts
 fi
 
 echo "Build static UI files with node..."
 buildah run \
     --workingdir=/usr/src/ui \
     --env="NODE_OPTIONS=--openssl-legacy-provider" \
-    nodebuilder-zidatel \
+    nodebuilder-zitadel \
     sh -c "yarn install && yarn build"
 
 # Add imageroot directory to the container image
@@ -45,7 +45,7 @@ buildah config --entrypoint=/ \
     --label="org.nethserver.authorizations=traefik@node:routeadm" \
     --label="org.nethserver.tcp-ports-demand=1" \
     --label="org.nethserver.rootfull=0" \
-    --label="org.nethserver.images=ghcr.io/zitadel/zitadel:latest docker.io/cockroachdb/cockroach:latest" \
+    --label="org.nethserver.images=docker.io/cockroachdb/cockroach:latest ghcr.io/zitadel/zitadel:latest " \
     "${container}"
 # Commit the image
 buildah commit "${container}" "${repobase}/${reponame}"

@@ -5,8 +5,8 @@
 
 [Unit]
 Description=Podman crdb-app.service
-BindsTo=zidatel.service
-After=zidatel.service
+BindsTo=zitadel.service
+After=zitadel.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
@@ -17,7 +17,7 @@ TimeoutStopSec=70
 ExecStartPre=/bin/rm -f %t/crdb-app.pid %t/crdb-app.ctr-id
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/crdb-app.pid \
     --cidfile %t/crdb-app.ctr-id --cgroups=no-conmon \
-    --pod-id-file %t/zidatel.pod-id --replace -d --name crdb-app \
+    --pod-id-file %t/zitadel.pod-id --replace -d --name crdb-app \
     --env=COCKROACH_RAFT_CLOSEDTS_ASSERTIONS_ENABLED=false \
     ${COCKROACH_IMAGE} \
     start-single-node --store=coackroach-data1 --insecure
