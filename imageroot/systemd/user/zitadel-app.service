@@ -24,8 +24,9 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/zitadel-app.pid \
     --volume=config:/config:Z \
     --env=ZITADEL_DATABASE_COCKROACH_HOST=crdb \
     --env=ZITADEL_EXTERNALSECURE=false \
-    ${ZITADEL_IMAGE}
-ExecStartPost=/usr/bin/podman exec zitadel-app /bin/bash start-from-init --masterKey=3AAAFE86B1CA7D860A95AAE91BEE5D48 --tlsMode=disabled
+    ${ZITADEL_IMAGE} \
+    start-from-init --masterKey=3AAAFE86B1CA7D860A95AAE91BEE5D48 --tlsMode=disabled
+#ExecStartPost=/usr/bin/podman exec zitadel-app /bin/bash start-from-init --masterKey=3AAAFE86B1CA7D860A95AAE91BEE5D48 --tlsMode=disabled
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/zitadel-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP zitadel-app
 SyslogIdentifier=%u
