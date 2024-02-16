@@ -22,7 +22,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/zitadel-app.pid \
     --cidfile %t/zitadel-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/zitadel.pod-id --replace -d --name  zitadel-app \
     --volume=config:/config:Z \
-    --env=ZITADEL_DATABASE_COCKROACH_HOST=crdb \
+    --env=ZITADEL_DATABASE_COCKROACH_HOST=crdb-app \
     --env=ZITADEL_EXTERNALSECURE=false \
     ${ZITADEL_IMAGE} \
     init zitadel
