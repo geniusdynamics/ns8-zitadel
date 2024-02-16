@@ -53,7 +53,7 @@ api-cli run get-configuration --agent module/zitadel1
 You can forcefully update the module
 
 ```shell
-api-cli run update-module --data '{"module_url":"ghcr.io/geniusdynamics/zitadel:latest","instances":["glpi1"],"force":true}'
+api-cli run update-module --data '{"module_url":"ghcr.io/geniusdynamics/zitadel:latest","instances":["zitadel1"],"force":true}'
 ```
 
 ## Uninstall
