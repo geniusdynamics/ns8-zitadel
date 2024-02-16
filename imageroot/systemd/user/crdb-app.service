@@ -15,13 +15,12 @@ EnvironmentFile=%S/state/environment
 Restart=always
 TimeoutStopSec=70
 ExecStartPre=/bin/rm -f %t/crdb-app.pid %t/crdb-app.ctr-id
-ExecStartPre=/bin/rm -r cockroach-data
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/crdb-app.pid \
     --cidfile %t/crdb-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/zidatel.pod-id --replace -d --name crdb-app \
     --env=COCKROACH_RAFT_CLOSEDTS_ASSERTIONS_ENABLED=false \
     ${COCKROACH_IMAGE} \
-    start-single-node --insecure
+    start-single-node --store=coackroach-data1 --insecure
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/crdb-app.ctr-id -t 10
 ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/crdb-app.ctr-id
 ExecReload=/usr/bin/podman kill -s HUP crdb-app
