@@ -18,7 +18,7 @@ data = json.load(sys.stdin)
 HOST = data.get('host')
 
 zitadel_app_config = {
-    "ZITADEL_EXTERNALDOMAIN": f"https://{HOST}",
+    "ZITADEL_EXTERNALDOMAIN": HOST,
 }
 agent.write_envfile("zitadel-app.env", zitadel_app_config)
 #agent.dump_env()
