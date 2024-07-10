@@ -33,7 +33,7 @@ def generate_random_password():
 
 #This is specific to you module, so you need to change it accordingly.
 # POSTGRES DB CONFIGURATION
-POSTGRES_DB = data.get('POSTGRES_DB', 'chiefonboarding')
+POSTGRES_DB = data.get('POSTGRES_DB', 'zitadel')
 POSTGRES_USER = data.get('POSTGRES_USER', 'postgres')
 POSTGRES_PASSWORD = generate_random_password()
 
