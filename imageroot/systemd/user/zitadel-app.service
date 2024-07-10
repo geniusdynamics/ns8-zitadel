@@ -22,6 +22,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/zitadel-app.pid \
     --cidfile %t/zitadel-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/zitadel.pod-id --replace -d --name  zitadel-app \
     --env-file=%S/state/zitadel.env \
+    --env-file=%S/state/zitadel-app.env \
     ${ZITADEL_IMAGE} start-from-init --masterkey "${MASTER_KEY}" --tlsMode disabled
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/zitadel-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP zitadel-app
