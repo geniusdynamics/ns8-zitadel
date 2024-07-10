@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+
+#
+# Copyright (C) 2022 Nethesis S.r.l.
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+
+import json
+import sys
+import agent
+import os
+import secrets
+
+# Try to parse the stdin as JSON.
+# If parsing fails, output everything to stderr
+data = json.load(sys.stdin)
+
+#This is specific to you module, so you need to change it accordingly.
+# - 'ZITADEL_DATABASE_POSTGRES_HOST=db'
+# - 'ZITADEL_DATABASE_POSTGRES_PORT=5432'
+# - 'ZITADEL_DATABASE_POSTGRES_DATABASE=zitadel'
+# - 'ZITADEL_DATABASE_POSTGRES_USER_USERNAME=zitadel'
+# - 'ZITADEL_DATABASE_POSTGRES_USER_PASSWORD=zitadel'
+# - 'ZITADEL_DATABASE_POSTGRES_USER_SSL_MODE=disable'
+# - 'ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME=postgres'
+# - 'ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD=postgres'
+# - 'ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE=disable'
+# - 'ZITADEL_EXTERNALSECURE=false'
+def generate_random_password():
+    password = os.urandom(16).hex()
+    return password[:16]
+
+
+#This is specific to you module, so you need to change it accordingly.
+# POSTGRES DB CONFIGURATION
+POSTGRES_DB = data.get('POSTGRES_DB', 'chiefonboarding')
+POSTGRES_USER = data.get('POSTGRES_USER', 'postgres')
+POSTGRES_PASSWORD = generate_random_password()
+
+postgres_config = {
+    'POSTGRES_DB': POSTGRES_DB,
+    'POSTGRES_USER': POSTGRES_USER,
+    'POSTGRES_PASSWORD': POSTGRES_PASSWORD
+}
+agent.write_envfile("database.env", postgres_config)
+
+zitadel = {
+    'ZITADEL_DATABASE_POSTGRES_HOST': 'postgresql-app',
+    'ZITADEL_DATABASE_POSTGRES_PORT': '5432',
+    'ZITADEL_DATABASE_POSTGRES_DATABASE': POSTGRES_DB,
+    'ZITADEL_DATABASE_POSTGRES_USER_USERNAME': POSTGRES_USER,
+    'ZITADEL_DATABASE_POSTGRES_USER_PASSWORD': POSTGRES_PASSWORD,
+    'ZITADEL_DATABASE_POSTGRES_USER_SSL_MODE': 'disable',
+    'ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME': POSTGRES_USER,
+    'ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD': POSTGRES_PASSWORD,
+    'ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE': 'disable',
+    'ZITADEL_EXTERNALSECURE': 'false'
+}
+agent.write_envfile("zitadel.env", zitadel)
+
+MASTER_KEY = secrets.token_hex(32)
+agent.set_env('MASTER_KEY', MASTER_KEY)
+
+# just before starting systemd unit
+agent.dump_env()

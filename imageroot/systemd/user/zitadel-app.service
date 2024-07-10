@@ -6,7 +6,7 @@
 [Unit]
 Description=Podman  zitadel-app.service
 BindsTo=zitadel.service
-After=zitadel.service crdb-app.service
+After=zitadel.service postgresql-app.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
@@ -21,12 +21,8 @@ ExecStartPre=-runagent discover-smarthost
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/zitadel-app.pid \
     --cidfile %t/zitadel-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/zitadel.pod-id --replace -d --name  zitadel-app \
-    --volume=config:/config:Z \
-    --env=ZITADEL_DATABASE_COCKROACH_HOST=crdb-app \
-    --env=ZITADEL_EXTERNALSECURE=false \
-    ${ZITADEL_IMAGE} \
-    init zitadel
-#ExecStartPost=/usr/bin/podman exec zitadel-app /bin/bash start-from-init --masterKey=3AAAFE86B1CA7D860A95AAE91BEE5D48 --tlsMode=disabled
+    --env-file=%S/state/zitadel.env \
+    ${ZITADEL_IMAGE} start-from-init --masterkey "${MASTER_KEY}" --tlsMode disabled
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/zitadel-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP zitadel-app
 SyslogIdentifier=%u
