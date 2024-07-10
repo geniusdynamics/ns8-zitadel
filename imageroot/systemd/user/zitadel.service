@@ -10,8 +10,8 @@
 
 [Unit]
 Description=Podman zitadel.service
-Requires=crdb-app.service zitadel-app.service
-Before=crdb-app.service zitadel-app.service
+Requires=postgresql-app.service zitadel-app.service
+Before=postgresql-app.service zitadel-app.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
