@@ -20,7 +20,7 @@ HOST = data.get('host')
 zitadel_app_config = {
     "ZITADEL_EXTERNALDOMAIN": HOST,
     "ZITADEL_EXTERNALPORT": "443",
-    "ZITADEL_EXTERNALSECURE": "true",
+    "ZITADEL_EXTERNALSECURE": "false",
 }
 agent.write_envfile("zitadel-app.env", zitadel_app_config)
 #agent.dump_env()
