@@ -9,7 +9,7 @@ import json
 import sys
 import agent
 import os
-import secrets
+import base64
 
 # Try to parse the stdin as JSON.
 # If parsing fails, output everything to stderr
@@ -57,8 +57,12 @@ zitadel = {
     'ZITADEL_EXTERNALSECURE': 'false'
 }
 agent.write_envfile("zitadel.env", zitadel)
+# Generate a 32-byte random binary string
+random_bytes = os.urandom(24)
 
-MASTER_KEY = secrets.token_hex(32)
+# Encode the binary string to a 32-character string using base64
+MASTER_KEY = base64.urlsafe_b64encode(random_bytes).rstrip(b'=').decode('ascii')
+
 agent.set_env('MASTER_KEY', MASTER_KEY)
 
 # just before starting systemd unit
