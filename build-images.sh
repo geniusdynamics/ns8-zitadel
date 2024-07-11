@@ -14,6 +14,7 @@ images=()
 repobase="${REPOBASE:-ghcr.io/geniusdynamics}"
 # Configure the image name
 reponame="zitadel"
+APP_VERSION="v2.56.0-debug"
 
 # Create a new empty container image
 container=$(buildah from scratch)
@@ -45,7 +46,7 @@ buildah config --entrypoint=/ \
     --label="org.nethserver.authorizations=traefik@node:routeadm" \
     --label="org.nethserver.tcp-ports-demand=1" \
     --label="org.nethserver.rootfull=0" \
-    --label="org.nethserver.images=docker.io/postgres:16-alpine ghcr.io/zitadel/zitadel:latest" \
+    --label="org.nethserver.images=docker.io/postgres:16-alpine ghcr.io/zitadel/zitadel:${APP_VERSION}" \
     "${container}"
 # Commit the image
 buildah commit "${container}" "${repobase}/${reponame}"
