@@ -5,7 +5,4 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-set -e
-
-echo "Dumping zitadel postgres database"
-podman exec postgres-app pg_dump pg_dump -U "${POSTGRES_USER}" --format=c "${POSTGRES_DB}" > zitadel.pg_dump
+rm -vf zitadel.pg_dump
