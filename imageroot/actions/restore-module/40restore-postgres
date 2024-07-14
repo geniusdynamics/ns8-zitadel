@@ -10,8 +10,10 @@ exec 1>&2 # Redirect any output to the journal (stderr)
 
 mkdir -vp restore
 cat - >restore/zitadel_restore.sh <<'EOS'
+
 # Read dump file from standard input:
-pg_restore --no-owner --no-privileges -U postgres -d zitadel
+
+pg_restore --no-owner --no-privileges -U "${POSTGRES_USER}" -d "${POSTGRES_DB}"
 ec=$?
 docker_temp_server_stop
 exit $ec
