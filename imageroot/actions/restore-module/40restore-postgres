@@ -24,6 +24,7 @@ podman run \
     --rm \
     --interactive \
     --network=none \
+    --volume=./restore:/docker-entrypoint-initdb.d/:Z \
     --volume=postgres-data:/var/lib/postgresql/data:Z \
     --replace --name=restore_db \
     --env-file=database.env \
