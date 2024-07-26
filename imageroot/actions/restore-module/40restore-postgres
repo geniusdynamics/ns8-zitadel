@@ -10,10 +10,8 @@ exec 1>&2 # Redirect any output to the journal (stderr)
 
 mkdir -vp restore
 cat - >restore/zitadel_restore.sh <<'EOS'
-
 # Read dump file from standard input:
-
-pg_restore --no-owner --no-privileges -U "${POSTGRES_USER}" -d "${POSTGRES_DB}"
+pg_restore --no-owner --no-privileges -U postgres -d zitadel
 ec=$?
 docker_temp_server_stop
 exit $ec
@@ -29,8 +27,9 @@ podman run \
     --volume=./restore:/docker-entrypoint-initdb.d/:Z \
     --volume=postgres-data:/var/lib/postgresql/data:Z \
     --replace --name=restore_db \
+    --env-file=database.env \
     --env TZ=UTC \
-    "${POSTGRES_IMAGE}" < zitadel.pg_dump
+    "${POSTGRES_IMAGE}" <  zitadel.pg_dump
 
 # If the restore is successful, clean up:
-rm -rfv restore/ zitadel.pg_dump
+rm -rfv restore/  zitadel.pg_dump

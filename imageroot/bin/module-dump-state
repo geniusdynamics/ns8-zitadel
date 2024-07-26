@@ -8,4 +8,4 @@
 set -e
 
 echo "Dumping zitadel postgres database"
-podman exec postgres-app pg_dump -U "${POSTGRES_USER}" --format=c "${POSTGRES_DB}" > zitadel.pg_dump
+podman exec postgresql-app pg_dump -U postgres --format=c  zitadel > zitadel.pg_dump
