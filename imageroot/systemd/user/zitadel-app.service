@@ -12,6 +12,7 @@ After=zitadel.service postgresql-app.service
 Environment=PODMAN_SYSTEMD_UNIT=%n
 EnvironmentFile=%S/state/environment
 EnvironmentFile=-%S/state/smarthost.env
+EnvironmentFile=-%S/state/zitadel.env
 WorkingDirectory=%S/state
 Restart=always
 TimeoutStopSec=70
