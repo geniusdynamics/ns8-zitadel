@@ -14,7 +14,7 @@ images=()
 repobase="${REPOBASE:-ghcr.io/geniusdynamics}"
 # Configure the image name
 reponame="zitadel"
-APP_VERSION="v4.2.2"
+APP_VERSION="v4.6.6"
 
 # Create a new empty container image
 container=$(buildah from scratch)
