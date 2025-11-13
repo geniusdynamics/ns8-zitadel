@@ -13,7 +13,7 @@ import agent
 # If parsing fails, output everything to stderr
 data = json.load(sys.stdin)
 
-#This is specific to you module, so you need to change it accordingly.
+# This is specific to you module, so you need to change it accordingly.
 # Configuration of the host
 # SMTP:
 # # must include the port, like smtp.mailtrap.io:2525. IPv6 is also supported, like [2001:db8::1]:2525
@@ -25,33 +25,49 @@ data = json.load(sys.stdin)
 # From: # ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_FROM
 # FromName: # ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_FROMNAME
 # ReplyToAddress: # ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_REPLYTOADDRESS
-HOST = data.get('host')
+HOST = data.get("host")
 
 # SET SMTP CONFIGURATION
 # the service if the leader node is not reachable:
 rdb = agent.redis_connect(use_replica=True)
 smtp_settings = agent.get_smarthost_settings(rdb)
 
-SMTP_HOST = smtp_settings['host']
-SMTP_PORT = smtp_settings['port']
-SMTP_USER = smtp_settings['username']
-SMTP_PASSWORD = smtp_settings['password']
-SMTP_ENCRYPTION = smtp_settings['encrypt_smtp']
-SMTP_FROM = 'true' if smtp_settings['tls_verify'] else 'false'
+SMTP_HOST = smtp_settings["host"]
+SMTP_PORT = smtp_settings["port"]
+SMTP_USER = smtp_settings["username"]
+SMTP_PASSWORD = smtp_settings["password"]
+SMTP_ENCRYPTION = smtp_settings["encrypt_smtp"]
+SMTP_FROM = "true" if smtp_settings["tls_verify"] else "false"
 
 
 zitadel_app_config = {
     "ZITADEL_EXTERNALDOMAIN": HOST,
     "ZITADEL_EXTERNALPORT": "443",
     "ZITADEL_EXTERNALSECURE": "true",
-    "ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_SMTP_HOST": SMTP_HOST + ":" + str(SMTP_PORT),
-    "ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_SMTP_USER": SMTP_USER,
-    "ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_SMTP_PASSWORD": SMTP_PASSWORD,
-    "ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_TLS": 'true' if smtp_settings['tls_verify'] else 'false',
-    "ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_FROM": SMTP_USER,
-    "ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_FROMNAME": "ZITADEL" + SMTP_USER,
-    "ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_REPLYTOADDRESS": SMTP_USER,
-    "ZITADEL_DEFAULTINSTANCE_DOMAINPOLICY_SMTPSENDERADDRESSMATCHESINSTANCEDOMAIN": "false",
 }
+
+if SMTP_HOST:
+    zitadel_app_config.update(
+        {
+            "ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_SMTP_HOST": f"{SMTP_HOST}:{SMTP_PORT}",
+            "ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_SMTP_USER": SMTP_USER,
+            "ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_SMT­P_PASSWORD": SMTP_PASSWORD,
+            "ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_TLS": (
+                "true" if smtp_settings["tls_verify"] else "false"
+            ),
+            "ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_FROM": SMTP_USER,
+            "ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_FROMNAME": "ZITADEL" + SMTP_USER,
+            "ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_REPLYTOADDRESS": SMTP_USER,
+            "ZITADEL_DEFAULTINSTANCE_DOMAINPOLICY_SMTPSENDERADDRESSMATCHESINSTANCEDOMAIN": "false",
+        }
+    )
+
+zitadel_app_config = {
+    k: v
+    for k, v in zitadel_app_config.items()
+    if v is not None and str(v).strip() != ""
+}
+
 agent.write_envfile("zitadel-app.env", zitadel_app_config)
-#agent.dump_env()
+
+# agent.dump_env()
