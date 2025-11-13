@@ -59,6 +59,7 @@ if SMTP_HOST:
             "ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_FROMNAME": "ZITADEL" + SMTP_USER,
             "ZITADEL_DEFAULTINSTANCE_SMTPCONFIGURATION_REPLYTOADDRESS": SMTP_USER,
             "ZITADEL_DEFAULTINSTANCE_DOMAINPOLICY_SMTPSENDERADDRESSMATCHESINSTANCEDOMAIN": "false",
+            "ZITADEL_DEFAULTINSTANCE_FEATURES_LOGINV2_REQUIRED": "false",
         }
     )
 
@@ -70,4 +71,6 @@ zitadel_app_config = {
 
 agent.write_envfile("zitadel-app.env", zitadel_app_config)
 
+ZITADEL_API_URL = f"https://{HOST}"
+NEXT_PUBLIC_BASE_PATH = "/ui/v2/login"
 # agent.dump_env()
