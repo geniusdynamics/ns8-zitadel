@@ -14,23 +14,23 @@ images=()
 repobase="${REPOBASE:-ghcr.io/geniusdynamics}"
 # Configure the image name
 reponame="zitadel"
-APP_VERSION="v2.58.0"
+APP_VERSION="v4.6.6"
 
 # Create a new empty container image
 container=$(buildah from scratch)
 
 # Reuse existing nodebuilder-zitadel container, to speed up builds
 if ! buildah containers --format "{{.ContainerName}}" | grep -q nodebuilder-zitadel; then
-    echo "Pulling NodeJS runtime..."
-    buildah from --name nodebuilder-zitadel -v "${PWD}:/usr/src:Z" docker.io/library/node:lts
+	echo "Pulling NodeJS runtime..."
+	buildah from --name nodebuilder-zitadel -v "${PWD}:/usr/src:Z" docker.io/library/node:lts
 fi
 
 echo "Build static UI files with node..."
 buildah run \
-    --workingdir=/usr/src/ui \
-    --env="NODE_OPTIONS=--openssl-legacy-provider" \
-    nodebuilder-zitadel \
-    sh -c "yarn install && yarn build"
+	--workingdir=/usr/src/ui \
+	--env="NODE_OPTIONS=--openssl-legacy-provider" \
+	nodebuilder-zitadel \
+	sh -c "yarn install && yarn build"
 
 # Add imageroot directory to the container image
 buildah add "${container}" imageroot /imageroot
@@ -43,11 +43,11 @@ buildah add "${container}" ui/dist /ui
 # rootfull=0 === rootless container
 # tcp-ports-demand=1 number of tcp Port to reserve , 1 is the minimum, can be udp or tcp
 buildah config --entrypoint=/ \
-    --label="org.nethserver.authorizations=traefik@node:routeadm" \
-    --label="org.nethserver.tcp-ports-demand=1" \
-    --label="org.nethserver.rootfull=0" \
-    --label="org.nethserver.images=docker.io/postgres:16-alpine ghcr.io/zitadel/zitadel:${APP_VERSION}" \
-    "${container}"
+	--label="org.nethserver.authorizations=traefik@node:routeadm" \
+	--label="org.nethserver.tcp-ports-demand=1" \
+	--label="org.nethserver.rootfull=0" \
+	--label="org.nethserver.images=docker.io/postgres:17 ghcr.io/zitadel/zitadel:${APP_VERSION}" \
+	"${container}"
 # Commit the image
 buildah commit "${container}" "${repobase}/${reponame}"
 
@@ -65,14 +65,14 @@ images+=("${repobase}/${reponame}")
 #
 
 #
-# Setup CI when pushing to Github. 
+# Setup CI when pushing to Github.
 # Warning! docker::// protocol expects lowercase letters (,,)
 if [[ -n "${CI}" ]]; then
-    # Set output value for Github Actions
-    printf "images=%s\n" "${images[*],,}" >> "${GITHUB_OUTPUT}"
+	# Set output value for Github Actions
+	printf "images=%s\n" "${images[*],,}" >>"${GITHUB_OUTPUT}"
 else
-    # Just print info for manual push
-    printf "Publish the images with:\n\n"
-    for image in "${images[@],,}"; do printf "  buildah push %s docker://%s:%s\n" "${image}" "${image}" "${IMAGETAG:-latest}" ; done
-    printf "\n"
+	# Just print info for manual push
+	printf "Publish the images with:\n\n"
+	for image in "${images[@],,}"; do printf "  buildah push %s docker://%s:%s\n" "${image}" "${image}" "${IMAGETAG:-latest}"; done
+	printf "\n"
 fi

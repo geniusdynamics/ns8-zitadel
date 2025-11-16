@@ -15,7 +15,8 @@ import base64
 # If parsing fails, output everything to stderr
 data = json.load(sys.stdin)
 
-#This is specific to you module, so you need to change it accordingly.
+
+# This is specific to you module, so you need to change it accordingly.
 # - 'ZITADEL_DATABASE_POSTGRES_HOST=db'
 # - 'ZITADEL_DATABASE_POSTGRES_PORT=5432'
 # - 'ZITADEL_DATABASE_POSTGRES_DATABASE=zitadel'
@@ -31,39 +32,40 @@ def generate_random_password():
     return password[:16]
 
 
-#This is specific to you module, so you need to change it accordingly.
+# This is specific to you module, so you need to change it accordingly.
 # POSTGRES DB CONFIGURATION
-POSTGRES_DB = data.get('POSTGRES_DB', 'zitadel')
-POSTGRES_USER = data.get('POSTGRES_USER', 'postgres')
+POSTGRES_DB = data.get("POSTGRES_DB", "zitadel")
+POSTGRES_USER = data.get("POSTGRES_USER", "postgres")
 POSTGRES_PASSWORD = generate_random_password()
+POSTGRES_USER_USERNAME = "zitadel"
+POSTGRES_USER_PASSWORD = generate_random_password()
 
 postgres_config = {
-    'POSTGRES_DB': POSTGRES_DB,
-    'POSTGRES_USER': POSTGRES_USER,
-    'POSTGRES_PASSWORD': POSTGRES_PASSWORD
+    "POSTGRES_USER": POSTGRES_USER,
+    "POSTGRES_PASSWORD": POSTGRES_PASSWORD,
 }
 agent.write_envfile("database.env", postgres_config)
-
-zitadel = {
-    'ZITADEL_DATABASE_POSTGRES_HOST': 'postgresql-app',
-    'ZITADEL_DATABASE_POSTGRES_PORT': '5432',
-    'ZITADEL_DATABASE_POSTGRES_DATABASE': POSTGRES_DB,
-    'ZITADEL_DATABASE_POSTGRES_USER_USERNAME': POSTGRES_USER,
-    'ZITADEL_DATABASE_POSTGRES_USER_PASSWORD': POSTGRES_PASSWORD,
-    'ZITADEL_DATABASE_POSTGRES_USER_SSL_MODE': 'disable',
-    'ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME': POSTGRES_USER,
-    'ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD': POSTGRES_PASSWORD,
-    'ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE': 'disable',
-    'ZITADEL_EXTERNALSECURE': 'false'
-}
-agent.write_envfile("zitadel.env", zitadel)
 # Generate a 32-byte random binary string
 random_bytes = os.urandom(24)
 
 # Encode the binary string to a 32-character string using base64
-MASTER_KEY = base64.urlsafe_b64encode(random_bytes).rstrip(b'=').decode('ascii')
+MASTER_KEY = base64.urlsafe_b64encode(random_bytes).rstrip(b"=").decode("ascii")
 
-agent.set_env('MASTER_KEY', MASTER_KEY)
+
+zitadel = {
+    "ZITADEL_DATABASE_POSTGRES_HOST": "postgresql-app",
+    "ZITADEL_DATABASE_POSTGRES_PORT": "5432",
+    "ZITADEL_DATABASE_POSTGRES_DATABASE": POSTGRES_DB,
+    "ZITADEL_DATABASE_POSTGRES_USER_USERNAME": POSTGRES_USER_USERNAME,
+    "ZITADEL_DATABASE_POSTGRES_USER_PASSWORD": POSTGRES_USER_PASSWORD,
+    "ZITADEL_DATABASE_POSTGRES_USER_SSL_MODE": "disable",
+    "ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME": POSTGRES_USER,
+    "ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD": POSTGRES_PASSWORD,
+    "ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE": "disable",
+    "ZITADEL_EXTERNALSECURE": "false",
+    "MASTER_KEY": MASTER_KEY,
+}
+agent.write_envfile("zitadel.env", zitadel)
 
 # just before starting systemd unit
 agent.dump_env()
