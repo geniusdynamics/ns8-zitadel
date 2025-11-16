@@ -41,6 +41,7 @@ POSTGRES_USER_USERNAME = "zitadel"
 POSTGRES_USER_PASSWORD = generate_random_password()
 
 postgres_config = {
+    "POSTGRES_DB": POSTGRES_DB,
     "POSTGRES_USER": POSTGRES_USER,
     "POSTGRES_PASSWORD": POSTGRES_PASSWORD,
 }
