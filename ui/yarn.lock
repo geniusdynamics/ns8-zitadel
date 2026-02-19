@@ -1012,9 +1012,9 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@nethserver/ns8-ui-lib@^0.1.32":
+"@nethserver/ns8-ui-lib@^0.1.22":
   version "0.1.32"
-  resolved "https://registry.npmmirror.com/@nethserver/ns8-ui-lib/-/ns8-ui-lib-0.1.32.tgz#7556dd5c7f96ff166597552c9b20e02599d86ba6"
+  resolved "https://registry.yarnpkg.com/@nethserver/ns8-ui-lib/-/ns8-ui-lib-0.1.32.tgz#7556dd5c7f96ff166597552c9b20e02599d86ba6"
   integrity sha512-CqW+Qr65uFiKYe/cG0qahRD+3ojXhDxMJ8Mf8M9CXDHY0WSWygyGYAftLxF8rtQkOdGHlaYv7cSK7TctHggHGA==
   dependencies:
     "@rollup/plugin-json" "^4.1.0"
@@ -8722,9 +8722,9 @@ vue-date-fns@^2.0.1:
     date-fns "^2.0.0"
 
 vue-debounce@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npmjs.org/vue-debounce/-/vue-debounce-4.0.0.tgz"
-  integrity sha512-+BrcKfLpyDpUJ58ZrAvI35irRCgYHFpnF3NJZwwaz8/kkKmEq6TWPXBIhLh2HQAsUZNwo52K/vQyiEFsJ/1RYA==
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/vue-debounce/-/vue-debounce-4.0.1.tgz#4b482123911a9033d8f8cb0595e43efcf9ef7aa0"
+  integrity sha512-f2HeuLA5b9WY+cKVAU+ydwi9UHxgCWZQt/6HP/5QogthFwm/e+WMP5jpUq2WhEvnHisPkPMomYDRXDxc2AiQDw==
 
 vue-eslint-parser@^7.0.0:
   version "7.8.0"
