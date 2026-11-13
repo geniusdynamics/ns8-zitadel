@@ -1,9 +1,12 @@
 {
   "name": "zitadel",
   "description": {
-    "en": "These features include multi-tenancy with branding customization, secure login, self-service, OpenID Connect, OAuth2.x, SAML2, Passwordless with FIDO2 (including Passkeys), OTP, U2F, and an unlimited audit trail. "
+    "en": "These features include multi-tenancy with branding customization, secure login, self-service, OpenID Connect, OAuth2.x, SAML2, Passwordless with FIDO2 (including Passkeys), OTP, U2F, and an unlimited audit trail. ",
+    "it": "ZITADEL è una piattaforma di gestione delle identità con login sicuro, multi-tenancy e OpenID Connect."
   },
-  "categories": ["authentication", "authorization", "identity"],
+  "categories": [
+    "security"
+  ],
   "authors": [
     {
       "name": "Kemboi Elvis",
