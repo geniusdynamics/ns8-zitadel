@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-3.0-or-later
+import getpass
+import os
+import sys
+
+from zitadel_directory import CREDENTIAL, write
+
+host = os.environ.get("TRAEFIK_HOST", "").lower()
+if not host or not sys.stdin.isatty():
+    sys.exit("Run interactively for a configured Zitadel instance")
+token = getpass.getpass("Zitadel directory management token: ").strip()
+if not token or any(char.isspace() for char in token):
+    sys.exit("Enter a valid personal access token")
+write(CREDENTIAL, {"host": host, "token": token})

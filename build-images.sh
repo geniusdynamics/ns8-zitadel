@@ -48,7 +48,7 @@ buildah add "${container}" ui/dist /ui
 # rootfull=0 === rootless container
 # tcp-ports-demand=1 number of tcp Port to reserve , 1 is the minimum, can be udp or tcp
 buildah config --entrypoint=/ \
-	--label="org.nethserver.authorizations=traefik@node:routeadm" \
+	--label="org.nethserver.authorizations=traefik@node:routeadm cluster:accountconsumer" \
 	--label="org.nethserver.tcp-ports-demand=1" \
 	--label="org.nethserver.rootfull=0" \
     --label="org.nethserver.min-core=3.0.0" \
