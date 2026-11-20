@@ -18,11 +18,14 @@ The directory-login integration provisions LDAP identity providers on Zitadel. C
 - Define a provider contract in which `register-client` returns the exact issuer alongside the client ID, secret and organization context. The proposed `srv/http/oidc-client` capability is a discussion point for that contract.
 - Update consumers to validate discovery and token issuer against the exact registered issuer. Preserve support for existing realm-based providers.
 - Define how a provider supplies organization context, requested scopes and authorization restrictions. Consumers need a stable provider and domain identity across renewals, movement and restore.
+- Replace each consumer's hard-coded list of IdP modules with a capability-based permission and discovery model that still authorizes registration for the selected provider.
 - Define registration ownership, callback updates, secret rotation, cleanup and recovery. Test across a realm-based provider, a shared issuer such as Zitadel, and Authentik's per-application issuers.
 - Document how JIT LDAP provisioning differs from role or group synchronization. A deployment that needs LDAP groups in tokens must configure explicit mappings through Zitadel project roles or Actions and verify the resulting claims.
 
 ## Keeping this guide current
 
-Reviewed against Zitadel **v4.20.5**, NS8 core stable ref `0656e83d2d46ddcbbf2436d072c6c5be5950d307`, and the `ns8-idp` reference commit `428668941469be93fc200c508718171f3c9cdd04`. These are contract review references. Record the exact NS8 core and IdP revisions from the next end-to-end validation run. Revisit the provider contract when the community discussion or NS8 implementation changes.
+Reviewed against Zitadel **v4.20.5**, NS8 core stable commit `e27e2abbeee37e16e92c23027dbe0d3403aa385c`, and the `ns8-idp` reference commit `428668941469be93fc200c508718171f3c9cdd04`. These are contract review references. Record the exact NS8 core and IdP revisions from the next end-to-end validation run. Revisit the provider contract when the community discussion or NS8 implementation changes. The community reply confirms that issuer discovery, multi-domain accounts, and per-provider consumer permissions are open design questions in the alpha prototype.
 
 [Follow the NethServer community discussion on Authentik and Zitadel provider blockers](https://community.nethserver.org/t/ns8-idp-via-authentik-and-zitadel-identified-blockers-for-the-ns8-sso-provider-and-suggested-improvements/29433)
+
+[Related Authentik guide](https://github.com/geniusdynamics/ns8-goauthentik/blob/2.5.0/docs/ns8-sso.md) · [NS8 SSO developer documentation](https://nethserver.github.io/ns8-core/core/user_domains/#single-sign-on)
