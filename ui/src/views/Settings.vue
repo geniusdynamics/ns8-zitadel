@@ -61,14 +61,42 @@
                 $t("settings.enabled")
               }}</template>
             </cv-toggle>
-              <!-- advanced options -->
-            <cv-accordion ref="accordion" class="maxwidth mg-bottom">
-              <cv-accordion-item :open="toggleAccordion[0]">
-                <template slot="title">{{ $t("settings.advanced") }}</template>
-                <template slot="content">
-                </template>
-              </cv-accordion-item>
-            </cv-accordion>
+            <h3 class="mg-bottom">{{ $t("settings.ldap_heading") }}</h3>
+            <cv-select
+              v-model="ldapDomain"
+              :label="$t('settings.ldap_domain')"
+              :invalid-message="error.ldap_domain"
+              :disabled="loading.getConfiguration || loading.configureModule"
+              class="mg-bottom"
+              ref="ldap_domain"
+            >
+              <cv-select-option value="">{{
+                $t("settings.ldap_none")
+              }}</cv-select-option>
+              <cv-select-option
+                v-for="domain in ldapDomainNames"
+                :key="domain"
+                :value="domain"
+              >
+                {{ domain }}
+              </cv-select-option>
+            </cv-select>
+            <template v-if="ldapDomain">
+              <p class="mg-bottom">{{ $t("settings.ldap_additional") }}</p>
+              <NsCheckbox
+                v-for="domain in ldapDomainNames.filter(
+                  (name) => name !== ldapDomain
+                )"
+                :key="domain"
+                :label="domain"
+                :checked="ldapAdditional.includes(domain)"
+                :disabled="loading.getConfiguration || loading.configureModule"
+                @change="toggleAdditionalDomain(domain)"
+              />
+              <p v-if="!ldapTokenConfigured" class="mg-bottom">
+                {{ $t("settings.ldap_token_help") }}
+              </p>
+            </template>
             <cv-row v-if="error.configureModule">
               <cv-column>
                 <NsInlineNotification
@@ -123,6 +151,10 @@ export default {
       },
       urlCheckInterval: null,
       host: "",
+      ldapDomain: "",
+      ldapAdditional: [],
+      ldapAvailable: [],
+      ldapTokenConfigured: false,
       isLetsEncryptEnabled: false,
       isHttpToHttpsEnabled: true,
       loading: {
@@ -133,12 +165,22 @@ export default {
         getConfiguration: "",
         configureModule: "",
         host: "",
+        ldap_domain: "",
         lets_encrypt: "",
         http2https: "",
       },
     };
   },
   computed: {
+    ldapDomainNames() {
+      return [
+        ...new Set([
+          ...this.ldapAvailable.map((domain) => domain.name),
+          ...this.ldapAdditional,
+          ...(this.ldapDomain ? [this.ldapDomain] : []),
+        ]),
+      ].sort();
+    },
     ...mapState(["instanceName", "core", "appName"]),
   },
   created() {
@@ -155,6 +197,15 @@ export default {
     next();
   },
   methods: {
+    toggleAdditionalDomain(domain) {
+      if (this.ldapAdditional.includes(domain)) {
+        this.ldapAdditional = this.ldapAdditional.filter(
+          (name) => name !== domain
+        );
+      } else {
+        this.ldapAdditional.push(domain);
+      }
+    },
     async getConfiguration() {
       this.loading.getConfiguration = true;
       this.error.getConfiguration = "";
@@ -200,6 +251,10 @@ export default {
     getConfigurationCompleted(taskContext, taskResult) {
       const config = taskResult.output;
       this.host = config.host;
+      this.ldapDomain = config.ldap_domain || "";
+      this.ldapAdditional = config.ldap_additional_domains || [];
+      this.ldapAvailable = config.ldap_available || [];
+      this.ldapTokenConfigured = Boolean(config.ldap_token_configured);
       this.isLetsEncryptEnabled = config.lets_encrypt;
       this.isHttpToHttpsEnabled = config.http2https;
 
@@ -269,6 +324,12 @@ export default {
           action: taskAction,
           data: {
             host: this.host,
+            ldap_domain: this.ldapDomain,
+            ldap_additional_domains: this.ldapDomain
+              ? this.ldapAdditional.filter(
+                  (domain) => domain !== this.ldapDomain
+                )
+              : [],
             lets_encrypt: this.isLetsEncryptEnabled,
             http2https: this.isHttpToHttpsEnabled,
           },

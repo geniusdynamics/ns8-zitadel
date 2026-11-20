@@ -13,6 +13,7 @@ import os
 import sys
 import json
 import agent
+from zitadel_directory import CREDENTIAL, MAPPING, available, read
 
 # Prepare return variable
 config = {}
@@ -21,6 +22,16 @@ config = {}
 config["host"] = os.getenv("TRAEFIK_HOST","")
 config["http2https"] = os.getenv("TRAEFIK_HTTP2HTTPS") == "True"
 config["lets_encrypt"] = os.getenv("TRAEFIK_LETS_ENCRYPT") == "True"
+
+state = read(MAPPING)
+domains = state.get("selected", [])
+config.update(
+    ldap_domain=domains[0] if domains else "",
+    ldap_additional_domains=domains[1:],
+    ldap_available=available(),
+    ldap_token_configured=bool(config["host"] and read(CREDENTIAL).get("host") == config["host"].lower()),
+    ldap_organizations={name: item["id"] for name, item in state.get("organizations", {}).items() if item.get("active")},
+)
 
 # Dump the configuration to stdout
 json.dump(config, fp=sys.stdout)

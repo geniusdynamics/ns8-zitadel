@@ -32,7 +32,14 @@
     "advanced": "Advanced",
     "configuring": "Configuring",
     "instance_configuration": "Configure zitadel",
-    "domain_already_used_in_traefik": "Domain already used in traefik"
+    "domain_already_used_in_traefik": "Domain already used in traefik",
+    "ldap_heading": "NS8 directory login",
+    "ldap_domain": "Primary NS8 user domain",
+    "ldap_none": "Disabled",
+    "ldap_additional": "Additional user domains",
+    "ldap_token_help": "Install a Zitadel directory management token on this node before saving.",
+    "ldap_invalid_selection": "Choose available NS8 domains, with a primary domain and no duplicates.",
+    "ldap_token_required": "Install a directory management token for this Zitadel hostname."
   },
   "about": {
     "title": "About"

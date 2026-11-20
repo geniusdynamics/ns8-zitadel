@@ -121,3 +121,8 @@ To setup the translation process:
 
 - add [GitHub Weblate app](https://docs.weblate.org/en/latest/admin/continuous.html#github-setup) to your repository
 - add your repository to [hosted.weblate.org]((https://hosted.weblate.org) or ask a NethServer developer to add it to ns8 Weblate project
+
+## Directory login and single sign-on
+
+- [Configure OpenLDAP and Samba AD directory login on Zitadel](docs/ns8-directory-login.md)
+- [Configure manual OIDC and track the NS8 provider discovery contract](docs/ns8-sso.md)
