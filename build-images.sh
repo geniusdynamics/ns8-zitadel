@@ -52,7 +52,7 @@ buildah config --entrypoint=/ \
 	--label="org.nethserver.tcp-ports-demand=1" \
 	--label="org.nethserver.rootfull=0" \
     --label="org.nethserver.min-core=3.0.0" \
-	--label="org.nethserver.images=docker.io/postgres:17.12 ghcr.io/zitadel/zitadel:${APP_VERSION}" \
+	--label="org.nethserver.images=docker.io/postgres:18.6 ghcr.io/zitadel/zitadel:${APP_VERSION}" \
 	"${container}"
 # Commit the image
 buildah commit "${container}" "${repobase}/${reponame}"
