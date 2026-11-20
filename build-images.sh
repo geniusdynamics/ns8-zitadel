@@ -18,7 +18,7 @@ reponame="zitadel"
 # renovate: datasource=npm packageName=corepack
 corepack_version=0.36.0
 # renovate: datasource=docker packageName=ghcr.io/zitadel/zitadel
-APP_VERSION=v4.20.1
+APP_VERSION=v4.20.5
 
 # Create a new empty container image
 container=$(buildah from scratch)
