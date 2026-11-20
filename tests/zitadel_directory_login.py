@@ -243,7 +243,7 @@ def main():
         check_recovery(test, fixture["local_admin"])
     else:
         raise ValueError("Choose online, outage, or unlinked")
-    print(f"Zitadel directory validation passed ({scenario})")
+    print("Zitadel directory validation passed:", scenario)
 
 
 if __name__ == "__main__":
