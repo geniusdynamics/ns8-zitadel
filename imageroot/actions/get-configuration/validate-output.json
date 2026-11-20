@@ -31,6 +31,32 @@
             "type": "boolean",
             "title": "HTTP to HTTPS redirection",
             "description": "Redirect all the HTTP requests to HTTPS"
+        },
+        "ldap_domain": {
+            "type": "string",
+            "maxLength": 253
+        },
+        "ldap_additional_domains": {
+            "type": "array",
+            "maxItems": 20,
+            "uniqueItems": true,
+            "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 253
+            }
+        },
+        "ldap_available": {
+            "type": "array",
+            "items": {
+                "type": "object"
+            }
+        },
+        "ldap_token_configured": {
+            "type": "boolean"
+        },
+        "ldap_organizations": {
+            "type": "object"
         }
     }
 }
