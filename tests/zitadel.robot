@@ -22,6 +22,16 @@ Check if zitadel works as expected
     ...    return_rc=True  return_stdout=False
     Should Be Equal As Integers    ${rc}  0
 
+Check if directory login defaults to disabled
+    ${output}    ${rc}=    Execute Command    api-cli run module/${module_id}/get-configuration --data '{}'
+    ...    return_rc=True
+    Should Be Equal As Integers    ${rc}    0    ${output}
+    ${config}=    Evaluate    json.loads($output)    modules=json
+    Should Be Empty    ${config}[ldap_domain]
+    Should Be Empty    ${config}[ldap_additional_domains]
+    Should Be Empty    ${config}[ldap_organizations]
+    Should Not Be True    ${config}[ldap_token_configured]
+
 Check if zitadel is removed correctly
     ${rc} =    Execute Command    remove-module --no-preserve ${module_id}
     ...    return_rc=True  return_stdout=False
